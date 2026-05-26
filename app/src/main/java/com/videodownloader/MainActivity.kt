@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.videodownloader.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var downloadJob: Job? = null
+    private var interstitialAd: InterstitialAd? = null
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
             MobileAds.initialize(this) {}
             binding.adView.loadAd(AdRequest.Builder().build())
+            loadInterstitial()
         } catch (e: Exception) {
             Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             throw e
@@ -363,11 +367,25 @@ class MainActivity : AppCompatActivity() {
         binding.tvStatus.text = "Downloading..."
     }
 
+    private fun loadInterstitial() {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(this, "ca-app-pub-6087950731856836/8346136717", adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    interstitialAd = ad
+                }
+                override fun onAdFailedToLoad(errorCode: Int) {
+                    interstitialAd = null
+                }
+            })
+    }
+
     private fun showComplete(fileName: String) {
         binding.progressContainer.visibility = android.view.View.GONE
         binding.btnDownload.isEnabled = true
         binding.tvStatus.text = "Saved: $fileName"
         Toast.makeText(this, "Saved to Movies/VideoDownloader", Toast.LENGTH_SHORT).show()
+        interstitialAd?.let { it.show(this) ; interstitialAd = null ; loadInterstitial() }
     }
 
     private fun showError(msg: String) {
