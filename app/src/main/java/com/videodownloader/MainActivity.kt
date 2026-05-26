@@ -374,7 +374,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onAdLoaded(ad: InterstitialAd) {
                     interstitialAd = ad
                 }
-                override fun onAdFailedToLoad(errorCode: Int) {
+                override fun onAdFailedToLoad(error: com.google.android.gms.ads.LoadAdError) {
                     interstitialAd = null
                 }
             })
