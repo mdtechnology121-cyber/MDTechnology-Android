@@ -174,12 +174,4 @@
         android:clickable="true"
         android:focusable="true" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-6087950731856836/8346136717" />
-
 </LinearLayout>

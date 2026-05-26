@@ -7,15 +7,12 @@
 
     <application
         android:allowBackup="true"
-        android:label="MD TECHNOLOGY"
+        android:label="MD TECHNOLOGY Pro"
         android:supportsRtl="true"
         android:theme="@style/Theme.VideoDownloader"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
 
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6087950731856836~4104473526"/>
 
         <activity
             android:name=".MainActivity"

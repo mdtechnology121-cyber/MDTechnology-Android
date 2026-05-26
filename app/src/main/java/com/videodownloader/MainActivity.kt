@@ -10,8 +10,6 @@ import android.provider.MediaStore
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.videodownloader.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -55,9 +53,6 @@ class MainActivity : AppCompatActivity() {
 
             binding.ivAbout.setOnClickListener { showAboutDialog() }
             binding.tvLegal.setOnClickListener { showLegalDialog() }
-
-            MobileAds.initialize(this) {}
-            binding.adView.loadAd(AdRequest.Builder().build())
         } catch (e: Exception) {
             Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
             throw e
