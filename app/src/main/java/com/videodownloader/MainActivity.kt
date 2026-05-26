@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var downloadJob: Job? = null
     private lateinit var prefs: android.content.SharedPreferences
-    private val LICENSE_URL = "YOUR_APPS_SCRIPT_URL_HERE"
+    private val LICENSE_URL = "https://script.google.com/macros/s/AKfycbwxRdK1V3pKa0cTRaQ7o6fPh4CGR6ftQTQIEdY6ZWb578NW2UyEuSyZsnIyOoOYc87fSQ/exec"
     private val DEVICE_ID: String by lazy {
         Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
     }
