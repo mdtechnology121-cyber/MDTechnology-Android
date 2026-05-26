@@ -1,13 +1,16 @@
 package com.videodownloader
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.webkit.WebView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -31,6 +34,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var downloadJob: Job? = null
+    private lateinit var prefs: android.content.SharedPreferences
+    private val LICENSE_URL = "YOUR_APPS_SCRIPT_URL_HERE"
+    private val DEVICE_ID: String by lazy {
+        Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+    }
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -44,6 +52,14 @@ class MainActivity : AppCompatActivity() {
             super.onCreate(savedInstanceState)
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
+
+            prefs = getSharedPreferences("license", Context.MODE_PRIVATE)
+            val savedKey = prefs.getString("license_key", "")
+            if (savedKey.isNullOrEmpty()) {
+                showLicenseDialog()
+            } else {
+                verifyLicense(savedKey)
+            }
 
             binding.btnDownload.setOnClickListener {
                 val url = binding.etUrl.text.toString().trim()
@@ -374,6 +390,63 @@ class MainActivity : AppCompatActivity() {
 
     private fun showStatus(msg: String) {
         binding.tvStatus.text = msg
+    }
+
+    private fun showLicenseDialog() {
+        val input = EditText(this).apply {
+            hint = "XXXX-XXXX-XXXX-XXXX"
+            setText("")
+            textSize = 18f
+        }
+        MaterialAlertDialogBuilder(this)
+            .setIcon(R.mipmap.ic_launcher)
+            .setTitle("Activate Pro")
+            .setMessage("Enter your license key to activate MD TECHNOLOGY Pro")
+            .setView(input)
+            .setCancelable(false)
+            .setPositiveButton("Activate") { _, _ ->
+                val key = input.text.toString().trim()
+                if (key.length >= 16) {
+                    verifyLicense(key)
+                } else {
+                    Toast.makeText(this, "Invalid license key", Toast.LENGTH_SHORT).show()
+                    showLicenseDialog()
+                }
+            }
+            .setNegativeButton("Get License") { _, _ ->
+                val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://mdtechnology121-cyber.github.io"))
+                startActivity(intent)
+                showLicenseDialog()
+            }
+            .show()
+    }
+
+    private fun verifyLicense(key: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val url = "$LICENSE_URL?action=verify&licenseKey=$key&deviceId=$DEVICE_ID"
+                val request = Request.Builder().url(url).get().build()
+                val response = client.newCall(request).execute()
+                val json = JSONObject(response.body?.string() ?: "{}")
+                if (json.optBoolean("valid")) {
+                    prefs.edit().putString("license_key", key).apply()
+                    withContext(Dispatchers.Main) {
+                        showStatus("Pro activated")
+                    }
+                } else {
+                    prefs.edit().remove("license_key").apply()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity, "Invalid license key", Toast.LENGTH_LONG).show()
+                        showLicenseDialog()
+                    }
+                }
+            } catch (_: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@MainActivity, "Network error. Check connection.", Toast.LENGTH_LONG).show()
+                    showLicenseDialog()
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
