@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- M letter (left) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,36 L28,68 L33,68 L33,46 L39,56 L45,46 L45,68 L50,68 L50,36 L45,36 L39,48 L33,36 Z" />
+    <!-- D letter (right) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M58,36 L58,68 L66,68 C76,68 83,62 83,52 C83,42 76,36 66,36 Z M62,40 L66,40 C74,40 79,44 79,52 C79,60 74,64 66,64 L62,64 Z" />
+    <!-- Tech accent dots -->
+    <path
+        android:fillColor="#AAFFFFFF"
+        android:pathData="M48,76 L48,80 L52,80 L52,76 Z M54,76 L54,80 L58,80 L58,76 Z M60,76 L60,80 L64,80 L64,76 Z" />
+</vector>

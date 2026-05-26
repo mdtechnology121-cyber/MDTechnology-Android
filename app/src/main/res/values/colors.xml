@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FF6200EE</color>
+    <color name="primaryDark">#FF3700B3</color>
+    <color name="primaryLight">#FF9C27B0</color>
+    <color name="accent">#FF03DAC5</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="surface">#FFF5F5FF</color>
+    <color name="onSurface">#FF1C1B1F</color>
+    <color name="background">#FFF0E6FF</color>
+    <color name="cardBackground">#FFFFFFFF</color>
+    <color name="textSecondary">#FF6B7280</color>
+</resources>
