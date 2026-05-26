@@ -180,6 +180,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+        app:adUnitId="ca-app-pub-6087950731856836/8346136717" />
 
 </LinearLayout>
